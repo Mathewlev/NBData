@@ -1,22 +1,24 @@
-d3.csv("NBData.csv", function(error, data) {
-    if (error) throw error;
+function onYearChanged() {
+    var select = d3.select('#scaleSelect').node();
+    // Get current value of select element, save to global currentYear
+    currentYear = select.options[select.selectedIndex].value
+    // Update chart
+    updateChart();
+}
 
-    // format the data
-    data.forEach(function(d) {
-        d["3P"] = +d["3P"];
-        d["3PA"] = +d["3PA"];
-    })
-
+function updateChart(){
+    console.log(dataset[currentYear]["Season"]);
+    
     //data[0] is 2019-2020 season. data[40] is that last (1979-1980).
 
     //3s made
-    made = data[0]["3P"];
+    made = dataset[currentYear]["3P"];
 
     //3s taken. 
-    threeAttempts = data[0]["3PA"];
+    threeAttempts = dataset[currentYear]["3PA"];
 
     //total shots taken
-    totalShots = data[0]["FGA"];
+    totalShots = dataset[currentYear]["FGA"];
 
     //total twos taken. 
     totalTwosTaken = totalShots - threeAttempts;
@@ -39,50 +41,86 @@ d3.csv("NBData.csv", function(error, data) {
     //scale system works, becayse the total of all blocks equals 600.  
     totalFGBlocks = Math.round(totalTwosTaken / totalShots * 600);
 
+    updateGraph();
+}
 
+function updateGraph() {
+    console.log("test");
+    var dots = d3.select("#grid").select("svg").selectAll(".row")
+        .data(gridData())
+        .selectAll(".circle")
+        .data(function(d) { return d; });
 
-    // twosMadeBlocks = Math.round(data[0]["FG"])
-    // console.log(ThreeMadeBlocks);
-    // console.log(data);
-
-    // roundMax = d3.round(max) rounding doesn't work in d3 v4;
-
-
-
-
-    function gridData() {
-        var data = new Array();
-        var xpos = 8; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
-        var ypos = 581;
-        var width = 17; //size of cells
-        var height = 20; //size of cells
-
-        // iterate for rows	
-        for (var column = 0; column < 30; column++) {
-            data.push(new Array());
-
-            // iterate for cells/columns inside rows
-            for (var row = 0; row < 20; row++) {
-                data[column].push({
-                        x: xpos,
-                        y: ypos,
-                        width: width,
-                        height: height,
-                    })
-                    // increment the x position. I.e. move it over by 50 (width variable)
-                ypos -= height;
+    dots.enter().append("cirlce")
+        .style("fill", function(d) {
+            if (ThreeMadeBlocks > 0) {
+                ThreeMadeBlocks--;
+                threeAttemptsBlocks--;
+                return "#44b32e";
+            } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks > 0) {
+                threeAttemptsBlocks--;
+                return "#e3372b";
+            } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks == 0 && totalFGBlocks > 0) {
+                totalFGBlocks--;
+                return "#575a5e"
+            } else {
+                return "fff";
             }
-            // reset the x position after a row is complete
-            ypos = 581;
-            // increment the y position for the next row. Move it down 50 (height variable)
-            xpos += height;
+        })
+        .style("stroke", "#000000");
+
+    dots.transition();
+    dots.exit().remove();
+}
+
+function gridData() {
+    console.log("test");
+    var data = new Array();
+    var xpos = 8; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
+    var ypos = 581;
+    var width = 17; //size of cells
+    var height = 20; //size of cells
+
+    // iterate for rows	
+    for (var column = 0; column < 30; column++) {
+        data.push(new Array());
+
+        // iterate for cells/columns inside rows
+        for (var row = 0; row < 20; row++) {
+            data[column].push({
+                    x: xpos,
+                    y: ypos,
+                    width: width,
+                    height: height,
+                })
+                // increment the x position. I.e. move it over by 50 (width variable)
+            ypos -= height;
         }
-        return data;
+        // reset the x position after a row is complete
+        ypos = 581;
+        // increment the y position for the next row. Move it down 50 (height variable)
+        xpos += height;
     }
+    return data;
+}
 
-    //just the data needed to create the rows and columns (the circles) like there radius and stuff.
-    var gridData = gridData();
+d3.csv("NBData.csv", function(error, data) {
+    if (error) throw error;
 
+    //Creating global instance of the dataset for functions outside this
+    dataset = data;
+
+    // format the data
+    data.forEach(function(d) {
+        d["3P"] = +d["3P"];
+        d["3PA"] = +d["3PA"];
+    })
+    //Global variable for the current year
+    currentYear = 0
+
+    updateChart();
+
+    var gridDat = gridData();
 
     var grid = d3.select("#grid")
         .append("svg")
@@ -90,7 +128,7 @@ d3.csv("NBData.csv", function(error, data) {
         .attr("height", "1500px");
 
     var row = grid.selectAll(".row")
-        .data(gridData)
+        .data(gridDat)
         .enter().append("g")
         .attr("class", "row");
 
@@ -119,11 +157,4 @@ d3.csv("NBData.csv", function(error, data) {
             }
         })
         .style("stroke", "#000000");
-
-
-
-
-
-
-
 });
