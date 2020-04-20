@@ -15,6 +15,10 @@
             </svg>
         </div>
         <div style="margin-left: 380px;">
+            <div class="slidercontainer">
+                <p>Year: <span id="yearSliderValue"></span></p>
+                <input type="range" min="1979" max="2018" value="2018" class="slider" id="myRange">
+            </div>
             <label for="categorySelect">Year:</label>
             <select class="custom-select large" id="scaleSelect" onchange="onYearChanged()">
                 <option selected value=0>2019-2020</option>

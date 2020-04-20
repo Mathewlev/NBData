@@ -63,21 +63,23 @@ var grid = svg.append('g')
 
 
 function updateGraph(first) {
-    if (!first) {
-        grid.selectAll(".row").remove();
-    }
+    // if (!first) {
+    //     grid.selectAll(".row").remove();
+    // }
 
     var gridDat = gridData();
 
     var row = grid.selectAll(".row")
-        .data(gridDat)
-        .enter().append("g")
+        .data(gridDat);
+    
+    row.enter().append("g")
         .attr("class", "row");
 
     var circles = row.selectAll(".circle")
-        .data(function(d) { return d; })
-        .enter().append("circle")
-        .attr("class", "square")
+        .data(function(d) { return d; });
+    
+    circles.enter().append("circle")
+        .attr("class", "circle")
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; })
         .attr("r", function(d) { return 7; })
@@ -93,7 +95,7 @@ function updateGraph(first) {
                 return "#e3372b";
             } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks == 0 && totalFGBlocks > 0) {
                 totalFGBlocks--;
-                return "#575a5e"
+                return "#575a5e";
             } else {
                 return "fff";
             }
@@ -101,7 +103,21 @@ function updateGraph(first) {
         .style("stroke", "#000000");
         // .transition().duration(750);
 
-
+    circles.style("fill", function(d) {
+        if (ThreeMadeBlocks > 0) {
+            ThreeMadeBlocks--;
+            threeAttemptsBlocks--;
+            return "#44b32e";
+        } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks > 0) {
+            threeAttemptsBlocks--;
+            return "#e3372b";
+        } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks == 0 && totalFGBlocks > 0) {
+            totalFGBlocks--;
+            return "#575a5e";
+        } else {
+            return "fff";
+        }
+    })
 }
 
 function gridData() {
@@ -157,3 +173,11 @@ d3.csv("NBData.csv", function(error, data) {
     updateChart();
     updateGraph(true);
 });
+
+var slider = document.getElementById("slidercontainer");
+var output = document.getElementById("yearSliderValue");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
