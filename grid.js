@@ -3,7 +3,7 @@ function onYearChanged() {
     // Get current value of select element, save to global currentYear
     currentYear = select.options[select.selectedIndex].value
     // Update chart
-    updateChart();
+    updateChart(false);
 }
 
 function updateChart(){
@@ -44,16 +44,28 @@ function updateChart(){
     updateGraph();
 }
 
+var svg = d3.select('svg');
+
+// Get layout parameters
+var svgWidth = +svg.attr('width');
+var svgHeight = +svg.attr('height');
+
+var padding = {t: 40, r: 40, b: 40, l: 40};
+
+// Compute chart dimensions
+var chartWidth = svgWidth - padding.l - padding.r;
+var chartHeight = svgHeight - padding.t - padding.b;
+
+var grid = svg.append('g')
+    .attr('transform', 'translate('+[padding.l, padding.t]+')')
+    .attr("class", "grid");
+
+
 function updateGraph(first) {
     if (!first) {
-        d3.select("#grid").select("svg").remove();
+        svg.select(".grid").selectAll(".row").remove();
     }
     var gridDat = gridData();
-
-    var grid = d3.select("#grid")
-        .append("svg")
-        .attr("width", "620px")
-        .attr("height", "1500px");
 
     var row = grid.selectAll(".row")
         .data(gridDat)
@@ -84,14 +96,15 @@ function updateGraph(first) {
                 return "fff";
             }
         })
-        .style("stroke", "#000000");
+        .style("stroke", "#000000")
+        .transition().duration(750);
 }
 
 function gridData() {
     console.log("test");
     var data = new Array();
-    var xpos = 8; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
-    var ypos = 581;
+    var xpos = 10; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
+    var ypos = chartHeight;
     var width = 17; //size of cells
     var height = 20; //size of cells
 
@@ -111,7 +124,7 @@ function gridData() {
             ypos -= height;
         }
         // reset the x position after a row is complete
-        ypos = 581;
+        ypos = chartHeight;
         // increment the y position for the next row. Move it down 50 (height variable)
         xpos += height;
     }
