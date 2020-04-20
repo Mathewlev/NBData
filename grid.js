@@ -3,7 +3,7 @@ function onYearChanged() {
     // Get current value of select element, save to global currentYear
     currentYear = select.options[select.selectedIndex].value
     // Update chart
-    updateChart(false);
+    updateChart();
 }
 
 function updateChart(){
@@ -41,7 +41,7 @@ function updateChart(){
     //scale system works, becayse the total of all blocks equals 600.  
     totalFGBlocks = Math.round(totalTwosTaken / totalShots * 600);
 
-    updateGraph();
+    updateGraph(false);
 }
 
 var svg = d3.select('svg');
@@ -63,7 +63,7 @@ var grid = svg.append('g')
 
 function updateGraph(first) {
     if (!first) {
-        svg.select(".grid").selectAll(".row").remove();
+        grid.selectAll(".row").remove();
     }
     var gridDat = gridData();
 
@@ -145,6 +145,6 @@ d3.csv("NBData.csv", function(error, data) {
     //Global variable for the current year
     currentYear = 0
 
-    updateChart(true);
-    updateGraph();
+    updateChart();
+    updateGraph(true);
 });
