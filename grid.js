@@ -68,6 +68,14 @@ var grid = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')')
     .attr("class", "grid");
 
+var madeCircle = d3.select("#legend")
+    .append('circle')
+    .attr("cx", 600)
+    .attr("cy", 300)
+    .attr("r", 80)
+    .style("fill", "#44b32e")
+    .style("stroke", "#000000");
+
 
 function updateGraph(first) {
     // if (!first) {
@@ -166,6 +174,7 @@ d3.csv("NBData.csv", function(error, data) {
 
     xScale = d3.scaleLinear()
     .range([0, chartWidth]);
+
 
     // format the data
     data.forEach(function(d) {

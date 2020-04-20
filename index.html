@@ -7,14 +7,14 @@
 
 <body>
     <div id="main">
-        <div style="margin-left: 440px; margin-top: 45px">
+        <div style="margin-left: 425px; margin-top: 45px">
          <h1 id="title">NBdAta</h1> 
          </div>
         <div style="margin-left: 160px; margin-top: 35px">
-            <svg width="670" height="470" style="border: 1px solid #777;">
+            <svg width="670" id ="svg" height="470">
             </svg>
         </div>
-        <div style="margin-left: 160px; margin-top: 10px;">
+        <div  id="toggle" style="margin-left: 160px; margin-top: 10px;">
             <label for="categorySelect">Year:</label>
             <select style="width: auto;" class="custom-select large" id="scaleSelect" onchange="onYearChanged()">
                 <option selected value=0>2019-2020</option>
@@ -62,17 +62,24 @@
             </select>
             <!-- <div class="slidercontainer"> -->
                 <!-- <label for="year">Year: <span id="yearSliderValue"></span></label> -->
+            <div id="drag">
                 <label for="happy" class="pull-left">1979-89</label>
                 <input type="range" min="1979" max="2019" value="2019" class="slider" id="yearRange" style="display: inline-block;">
                 <label for="" class="pull-right">2019-20</label>
+            </div>
+                
             <!-- </div> -->
         </div>
-        <div style="margin-left:160px; margin-top:10px">
-            <p>3-Pointers Attempted: <span id="3PAStat"></span></p>
-            <p>3-Pointers Made: <span id="3PMStat"></span></p>
-            <p>Total Shots Attempted: <span id="FGAStat"></span></p>
-            <p>3PT Attempts to Total Attempts Ratio: <span id="3PA_FGAStat"></span></p>
+        <div id="stats">
+            <p><b>3-Pointers Attempted: </b><span id="3PAStat"></span></p>
+            <p><b>3-Pointers Made:</b> <span id="3PMStat"></span></p>
+            <p><b>Total Shots Attempted: </b><span id="FGAStat"></span></p>
+            <p><b>3PT Attempts to Total Attempts Ratio: </b><span id="3PA_FGAStat"></span></p>
         </div>
+        <div id="legend">
+            
+        </div>
+
     </div>
     <script src="grid.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
