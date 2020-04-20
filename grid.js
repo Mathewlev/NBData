@@ -44,14 +44,31 @@ function updateChart(){
     updateGraph();
 }
 
-function updateGraph() {
-    console.log("test");
-    var dots = d3.select("#grid").select("svg").selectAll(".row")
-        .data(gridData())
-        .selectAll(".circle")
-        .data(function(d) { return d; });
+function updateGraph(first) {
+    if (!first) {
+        d3.select("#grid").select("svg").remove();
+    }
+    var gridDat = gridData();
 
-    dots.enter().append("cirlce")
+    var grid = d3.select("#grid")
+        .append("svg")
+        .attr("width", "620px")
+        .attr("height", "1500px");
+
+    var row = grid.selectAll(".row")
+        .data(gridDat)
+        .enter().append("g")
+        .attr("class", "row");
+
+    var circles = row.selectAll(".circle")
+        .data(function(d) { return d; })
+        .enter().append("circle")
+        .attr("class", "square")
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; })
+        .attr("r", function(d) { return 7; })
+        //this is where the coloring gets done. threes made, then threes attempted, accounting for overlap,
+        //then total shots taken
         .style("fill", function(d) {
             if (ThreeMadeBlocks > 0) {
                 ThreeMadeBlocks--;
@@ -68,9 +85,6 @@ function updateGraph() {
             }
         })
         .style("stroke", "#000000");
-
-    dots.transition();
-    dots.exit().remove();
 }
 
 function gridData() {
@@ -118,43 +132,6 @@ d3.csv("NBData.csv", function(error, data) {
     //Global variable for the current year
     currentYear = 0
 
-    updateChart();
-
-    var gridDat = gridData();
-
-    var grid = d3.select("#grid")
-        .append("svg")
-        .attr("width", "620px")
-        .attr("height", "1500px");
-
-    var row = grid.selectAll(".row")
-        .data(gridDat)
-        .enter().append("g")
-        .attr("class", "row");
-
-    var column = row.selectAll(".circle")
-        .data(function(d) { return d; })
-        .enter().append("circle")
-        .attr("class", "square")
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; })
-        .attr("r", function(d) { return 7; })
-        //this is where the coloring gets done. threes made, then threes attempted, accounting for overlap,
-        //then total shots taken
-        .style("fill", function(d) {
-            if (ThreeMadeBlocks > 0) {
-                ThreeMadeBlocks--;
-                threeAttemptsBlocks--;
-                return "#44b32e";
-            } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks > 0) {
-                threeAttemptsBlocks--;
-                return "#e3372b";
-            } else if (ThreeMadeBlocks == 0 && threeAttemptsBlocks == 0 && totalFGBlocks > 0) {
-                totalFGBlocks--;
-                return "#575a5e"
-            } else {
-                return "fff";
-            }
-        })
-        .style("stroke", "#000000");
+    updateChart(true);
+    updateGraph();
 });
