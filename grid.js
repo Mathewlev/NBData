@@ -61,20 +61,11 @@ var grid = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')')
     .attr("class", "grid");
 
-// Create groups for the x- and y-axes
-var xAxisG = chartG.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', 'translate('+[0, chartHeight]+')');
-
 
 function updateGraph(first) {
     if (!first) {
         grid.selectAll(".row").remove();
     }
-
-    xScale.domain(domainMap[chartScales.x]).nice();
-
-    xAxisG.call(d3.axisBottom(xScale));
 
     var gridDat = gridData();
 
@@ -110,9 +101,7 @@ function updateGraph(first) {
         .style("stroke", "#000000");
         // .transition().duration(750);
 
-        xAxisG.transition()
-        .duration(750)
-        .call(d3.axisBottom(xScale));
+
 }
 
 function gridData() {
