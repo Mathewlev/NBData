@@ -68,13 +68,77 @@ var grid = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')')
     .attr("class", "grid");
 
-var madeCircle = d3.select("#legend")
-    .append('circle')
-    .attr("cx", 600)
-    .attr("cy", 300)
-    .attr("r", 80)
+var legend = d3.select("#legendSVG");
+
+legend.append('circle')
+    .attr("cx", 25)
+    .attr("cy", 20)
+    .attr("r", 7)
     .style("fill", "#44b32e")
     .style("stroke", "#000000");
+
+legend.append('circle')
+    .attr("cx", 25)
+    .attr("cy", 70)
+    .attr("r", 7)
+    .style("fill", "#e3372b")
+    .style("stroke", "#000000");
+
+legend.append('circle')
+    .attr("cx", 25)
+    .attr("cy", 120)
+    .attr("r", 7)
+    .style("fill", "#575a5e")
+    .style("stroke", "#000000");
+
+legend.append('circle')
+    .attr("cx", 25)
+    .attr("cy", 170)
+    .attr("r", 7)
+    .style("fill", "#44b32e")
+    .style("stroke", "#000000");
+
+legend.append('circle')
+    .attr("cx", 55)
+    .attr("cy", 170)
+    .attr("r", 7)
+    .style("fill", "#e3372b")
+    .style("stroke", "#000000");
+
+legend.append("text")
+    .attr("x", 40)
+    .attr("y", 21)
+    .text("3 pointers made")
+    .style("font-size", "15px")
+    .attr("alignment-baseline","middle")
+
+legend.append("text")
+    .attr("x", 40)
+    .attr("y", 71)
+    .text("3 pointers missed")
+    .style("font-size", "15px")
+    .attr("alignment-baseline","middle")
+
+legend.append("text")
+    .attr("x", 40)
+    .attr("y", 121)
+    .text("Total 2 pointers taken")
+    .style("font-size", "15px")
+    .attr("alignment-baseline","middle")
+    
+legend.append("text")
+    .attr("x", 35)
+    .attr("y", 170)
+    .text("+")
+    .style("font-size", "15px")
+    .attr("alignment-baseline","middle")
+    
+legend.append("text")
+    .attr("x", 70)
+    .attr("y", 170)
+    .text(" = Total 3 pointers taken")
+    .style("font-size", "15px")
+    .attr("alignment-baseline","middle")
 
 
 function updateGraph(first) {
