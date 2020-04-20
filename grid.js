@@ -42,6 +42,12 @@ function updateChart(){
     //scale system works, becayse the total of all blocks equals 600.  
     totalFGBlocks = Math.round(totalTwosTaken / totalShots * 600);
 
+    //Update Statistics Displayed on Screen
+    document.getElementById("3PMStat").innerHTML = made;
+    document.getElementById("3PAStat").innerHTML = threeAttempts;
+    document.getElementById("FGAStat").innerHTML = totalShots;
+    document.getElementById("3PA_FGAStat").innerHTML = threeAttemptsToShotAttemptsRatio.toFixed(3);
+
     updateGraph(false);
 }
 
