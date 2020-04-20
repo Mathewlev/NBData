@@ -2,6 +2,7 @@ function onYearChanged() {
     var select = d3.select('#scaleSelect').node();
     // Get current value of select element, save to global currentYear
     currentYear = select.options[select.selectedIndex].value
+    slider.value = sliderHelper[currentYear];
     // Update chart
     updateChart();
 }
@@ -169,15 +170,24 @@ d3.csv("NBData.csv", function(error, data) {
     currentYear = 0
 
     chartScales = {x: '1'};
-
+    sliderHelper = new Array();
+    currentYearHelper = 0;
+    for (var i = 0; i < dataset.length; i++) {
+        str = dataset[i]["Season"]
+        sliderHelper.push(str.substring(0,str.length-3));
+    }
     updateChart();
     updateGraph(true);
 });
 
-var slider = document.getElementById("slidercontainer");
-var output = document.getElementById("yearSliderValue");
-output.innerHTML = slider.value;
+var slider = document.getElementById("yearRange");
+//var output = document.getElementById("yearSliderValue");
+//output.innerHTML = slider.value;
 
 slider.oninput = function() {
-  output.innerHTML = this.value;
+  //output.innerHTML = this.value;
+  currentYear = 2019 - slider.value;
+  select = d3.select('#scaleSelect').node();
+  select.value = currentYear;
+  updateChart()
 }
