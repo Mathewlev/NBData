@@ -45,6 +45,7 @@ function updateChart(){
 }
 
 var svg = d3.select('svg');
+var xScale;
 
 // Get layout parameters
 var svgWidth = +svg.attr('width');
@@ -60,11 +61,21 @@ var grid = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')')
     .attr("class", "grid");
 
+// Create groups for the x- and y-axes
+var xAxisG = chartG.append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate('+[0, chartHeight]+')');
+
 
 function updateGraph(first) {
     if (!first) {
         grid.selectAll(".row").remove();
     }
+
+    xScale.domain(domainMap[chartScales.x]).nice();
+
+    xAxisG.call(d3.axisBottom(xScale));
+
     var gridDat = gridData();
 
     var row = grid.selectAll(".row")
@@ -96,8 +107,12 @@ function updateGraph(first) {
                 return "fff";
             }
         })
-        .style("stroke", "#000000")
-        .transition().duration(750);
+        .style("stroke", "#000000");
+        // .transition().duration(750);
+
+        xAxisG.transition()
+        .duration(750)
+        .call(d3.axisBottom(xScale));
 }
 
 function gridData() {
@@ -137,6 +152,9 @@ d3.csv("NBData.csv", function(error, data) {
     //Creating global instance of the dataset for functions outside this
     dataset = data;
 
+    xScale = d3.scaleLinear()
+    .range([0, chartWidth]);
+
     // format the data
     data.forEach(function(d) {
         d["3P"] = +d["3P"];
@@ -144,6 +162,8 @@ d3.csv("NBData.csv", function(error, data) {
     })
     //Global variable for the current year
     currentYear = 0
+
+    chartScales = {x: '1'};
 
     updateChart();
     updateGraph(true);
